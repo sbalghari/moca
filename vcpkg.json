@@ -1,0 +1,11 @@
+{
+  "name": "moca",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "nlohmann-json",
+    {
+      "name": "cpr",
+      "features": ["ssl"]
+    }
+  ]
+}
