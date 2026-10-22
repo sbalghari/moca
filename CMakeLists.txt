@@ -14,6 +14,10 @@ find_package(cpr CONFIG REQUIRED)
 
 add_executable(moca
     src/main.cpp
+    src/core/agent.cpp
+    src/core/config.cpp
+    src/core/http.cpp
+    src/core/tools.cpp
 )
 
 target_include_directories(moca
