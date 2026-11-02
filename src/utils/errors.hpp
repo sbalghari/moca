@@ -24,4 +24,9 @@ class ConfigException : public MocaBaseException {
     using MocaBaseException::MocaBaseException;
 };
 
+class CLIException : public MocaBaseException {
+  public:
+    using MocaBaseException::MocaBaseException;
+};
+
 #endif // MOCA_UTILS_ERRORS_HPP

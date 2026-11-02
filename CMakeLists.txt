@@ -18,6 +18,7 @@ add_executable(moca
     src/core/config.cpp
     src/core/http.cpp
     src/core/tools.cpp
+    src/cli/cli.cpp
 )
 
 target_include_directories(moca
@@ -28,6 +29,10 @@ target_link_libraries(moca
     PRIVATE
         nlohmann_json::nlohmann_json
         cpr::cpr
+)
+
+target_compile_definitions(moca PRIVATE
+    MOCA_VERSION="${PROJECT_VERSION}"
 )
 
 target_compile_options(moca

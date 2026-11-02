@@ -1,21 +1,27 @@
+#include "cli/cli.hpp"
 #include "core/agent.hpp"
 
-#include <iostream>
-#include <string>
 
 int main(int argc, char *argv[]) {
-    if (argc < 3 || std::string(argv[1]) != "-p") {
-        std::cerr << "Expected first argument to be '-p'" << std::endl;
-        return 1;
+
+    CLI cli;
+    CLIOptions options = cli.parse_arguments(argc, argv);
+
+    if (options.help) {
+        cli.print_help();
+        return 0;
     }
 
-    std::string prompt = argv[2];
+    if (options.version) {
+        cli.print_version();
+        return 0;
+    }
 
-    if (prompt.empty()) {
-        std::cerr << "Prompt must not be empty" << std::endl;
-        return 1;
+    if (options.list_models) {
+        AgentMainloop::print_available_models();
+        return 0;
     }
 
     // Start the agent.
-    return AgentMainloop::start(prompt);
+    return AgentMainloop::start(options.prompt);
 }
