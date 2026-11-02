@@ -72,3 +72,24 @@ int AgentMainloop::start(const std::string& prompt) {
 
     return handle_tool_call(tool_call);
 }
+
+void AgentMainloop::print_available_models(){
+    MocaConfig config;
+    cpr::Response response = get_models(config.api_key);
+
+    if (response.status_code != 200) {
+        std::cerr << "Failed to fetch models: "
+                << response.status_code << '\n'
+                << response.text << '\n';
+        return;
+    }
+
+    json data = json::parse(response.text);
+
+    for (const auto& model : data["data"]) {
+        std::cout << model["id"].get<std::string>()
+                << " - "
+                << model["name"].get<std::string>()
+                << '\n';
+    }
+}

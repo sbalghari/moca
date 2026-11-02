@@ -1,4 +1,5 @@
 #include "http.hpp"
+#include <cpr/response.h>
 
 cpr::Response post_chat_completion(const std::string &base_url,
                                    const std::string &api_key,
@@ -8,4 +9,10 @@ cpr::Response post_chat_completion(const std::string &base_url,
                      cpr::Header{{"Authorization", "Bearer " + api_key},
                                  {"Content-Type", "application/json"}},
                      cpr::Body{request_body.dump()});
+}
+
+cpr::Response get_models(const std::string &api_key) {
+    return cpr::Get(cpr::Url{"https://openrouter.ai/api/v1/models"},
+                    cpr::Header{{"Authorization", "Bearer " + api_key},
+                                {"Accept", "application/json"}});
 }
