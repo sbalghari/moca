@@ -13,8 +13,8 @@ struct CLIOptions {
 };
 
 class CLI {
-public:
-    static CLIOptions parse_arguments(int argc, char* argv[]);
+  public:
+    static CLIOptions parse_arguments(int argc, char *argv[]);
 
     static void print_help();
     static void print_version();

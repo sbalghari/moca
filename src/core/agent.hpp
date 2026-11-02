@@ -4,8 +4,8 @@
 #include <string>
 
 class AgentMainloop {
-public:
-    static int start(const std::string& prompt);
+  public:
+    static int start(const std::string &prompt);
     static void print_available_models();
 };
 
