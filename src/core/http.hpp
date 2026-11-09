@@ -7,6 +7,8 @@
 
 #include <string>
 
+// HTTP requests
+
 cpr::Response post_chat_completion(const std::string &base_url,
                                    const std::string &api_key,
                                    const nlohmann::json &request_body);

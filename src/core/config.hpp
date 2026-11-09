@@ -1,17 +1,45 @@
 #ifndef MOCA_CORE_CONFIG_HPP
 #define MOCA_CORE_CONFIG_HPP
 
-#include <string>
+#include <filesystem>
+#include <nlohmann/json.hpp>
 
-struct MocaConfig {
-    std::string app_name = "moca";
-    std::string app_ver = "0.1.0";
-    std::string model = "openrouter/free";
-    std::string api_key;
-    std::string base_url = "https://openrouter.ai/api/v1";
-    bool verbose = false;
+using json = nlohmann::json;
 
-    MocaConfig();
+// Providers
+const json OpenRouter = {
+    {"name", "OpenRouter"},
+    {"default_model", "openrouter/free"},
+    {"api_key", ""},
+    {"urls",
+     {{"base", "https://openrouter.ai/api/v1"},
+      {"chat_completion", "/chat/completions"},
+      {"models", "/models"}}},
+    {"capabilities",
+     {{"streaming", true},
+      {"tool_calling", true},
+      {"structured_outputs", true},
+      {"model_dependent", true}}},
+    {"documentation",
+     {{"api", "https://openrouter.ai/docs/api-reference/overview"},
+      {"models", "https://openrouter.ai/models"},
+      {"quickstart", "https://openrouter.ai/docs/quickstart"}}}};
+
+class MocaConfig {
+public:
+    MocaConfig() : path_(get_config_dir()) {}
+
+    void load();
+    void save() const;
+
+    json& data();
+    const json& data() const;
+
+    static std::filesystem::path get_config_dir();
+
+private:
+    std::filesystem::path path_;
+    json config_;
 };
 
 #endif // MOCA_CORE_CONFIG_HPP
