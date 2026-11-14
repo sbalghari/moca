@@ -14,10 +14,10 @@ using json = nlohmann::json;
 
 namespace {
 
-json build_request_body(const std::string &prompt, const MocaConfig &config) {
+json build_request_body(const std::string &prompt, const std::string& model) {
 
     return {
-        {"model", config.model},
+        {"model", model},
         {"messages", json::array({{{"role", "user"}, {"content", prompt}}})},
         {"tools", tool_definitions()}};
 }
@@ -27,7 +27,7 @@ json build_request_body(const std::string &prompt, const MocaConfig &config) {
 int AgentMainloop::start(const std::string &prompt) {
     MocaConfig config;
 
-    json request_body = build_request_body(prompt, config);
+    json request_body = build_request_body(prompt, "");
 
     cpr::Response response =
         post_chat_completion(config.base_url, config.api_key, request_body);

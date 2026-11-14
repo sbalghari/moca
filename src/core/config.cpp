@@ -4,26 +4,8 @@
 
 #include <cstdlib>
 #include <filesystem>
-#include <format>
-#include <stdexcept>
-#include <string>
 #include <fstream>
-
-namespace {
-namespace fs = std::filesystem;
-
-std::string get_env(const std::string &key) {
-    const char *value = std::getenv(key.c_str());
-
-    if (value != nullptr) {
-        return value;
-    }
-
-    throw ConfigException(
-        std::format("Environment variable '{}' not defined!", key));
-}
-
-} // namespace
+#include <string>
 
 void MocaConfig::load() {
     std::ifstream file(path_);
@@ -45,36 +27,32 @@ void MocaConfig::save() const {
     file << config_.dump(4) << '\n';
 }
 
-nlohmann::json& MocaConfig::data() {
-    return config_;
-}
+nlohmann::json &MocaConfig::data() { return config_; }
 
-const nlohmann::json& MocaConfig::data() const {
-    return config_;
-}
+const nlohmann::json &MocaConfig::data() const { return config_; }
 
-fs::path MocaConfig::get_config_dir() {
+std::filesystem::path MocaConfig::get_config_dir() {
 #ifdef _WIN32
     const char *appdata = std::getenv("APPDATA");
 
     if (!appdata)
-        throw std::runtime_error("APPDATA not set");
+        throw ConfigException("Enviroment variable 'APPDATA' is not set");
 
-    return fs::path(appdata) / "Moca";
+    return std::filesystem::path(appdata) / "Moca";
 
 #else
     const char *xdg_config = std::getenv("XDG_CONFIG_HOME");
 
-    // The first checks weather the xdg_config is a nullptr, and the second checks that xdg_config
-    // have an actuall value and isn't just a empty string or \0
+    // Check whether xdg_config is non-null and contains a meaningful value,
+    // rather than an empty string or a null terminator.
     if (xdg_config && *xdg_config)
-        return fs::path(xdg_config) / "moca";
+        return std::filesystem::path(xdg_config) / "moca";
 
     const char *home = std::getenv("HOME");
 
     if (!home)
-        throw std::runtime_error("HOME not set");
+        throw ConfigException("Enviroment variable 'HOME' is not set!");
 
-    return fs::path(home) / ".config" / "moca";
+    return std::filesystem::path(home) / ".config" / "moca";
 #endif
 }

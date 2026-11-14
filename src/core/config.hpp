@@ -4,13 +4,10 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
-
 // Providers
-const json OpenRouter = {
+const nlohmann::json OpenRouter = {
     {"name", "OpenRouter"},
     {"default_model", "openrouter/free"},
-    {"api_key", ""},
     {"urls",
      {{"base", "https://openrouter.ai/api/v1"},
       {"chat_completion", "/chat/completions"},
@@ -32,14 +29,14 @@ public:
     void load();
     void save() const;
 
-    json& data();
-    const json& data() const;
+    nlohmann::json& data();
+    const nlohmann::json& data() const;
 
     static std::filesystem::path get_config_dir();
 
 private:
     std::filesystem::path path_;
-    json config_;
+    nlohmann::json config_;
 };
 
 #endif // MOCA_CORE_CONFIG_HPP

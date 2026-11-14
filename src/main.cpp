@@ -1,4 +1,4 @@
-#include "cli/cli.hpp"
+#include "cli.hpp"
 #include "core/agent.hpp"
 
 int main(int argc, char *argv[]) {

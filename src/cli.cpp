@@ -1,5 +1,5 @@
 #include "cli.hpp"
-#include "../utils/errors.hpp"
+#include "utils/errors.hpp"
 
 #include <iostream>
 
@@ -35,6 +35,16 @@ CLIOptions CLI::parse_arguments(int argc, char *argv[]) {
             if (options.model.empty()) {
                 throw CLIException("Model must not be empty");
             }
+        } else if (arg == "-k" || arg == "--api-key") {
+            if (i + 1 >= argc) {
+                throw CLIException("Missing value for " + arg);
+            }
+
+            options.api_key = argv[++i];
+
+            if (options.api_key.empty()) {
+                throw CLIException("API-KEY must not be empty");
+            }
         } else {
             throw CLIException("Unknown option: " + arg);
         }
@@ -51,17 +61,19 @@ CLIOptions CLI::parse_arguments(int argc, char *argv[]) {
 
 void CLI::print_help() {
     std::cout << R"(
-Moca - A lightweight AI coding agent
+Moca - A Simple Coding Agent written in modern C++. Only OpenRouter is supported
+as a model provider right now.
 
 Usage:
   moca [OPTIONS]
 
 Options:
-  -p, --prompt <TEXT>    Prompt for the agent to start a session with
-  -m, --model <MODEL>    Select a model for the session, NotImplemented!
-  -L, --list-models      List available models from OpenRouter
-  -h, --help             Print this help message and exit
-  -v, --version          Print the app's version and exit
+  -p, --prompt <TEXT>     Prompt for the agent to start a session with
+  -m, --model <MODEL>     Select a model for the session
+  -k, --api-key <KEY>     Pass an API key explicitly for this session
+  -L, --list-models       List available models
+  -h, --help              Print this help message and exit
+  -v, --version           Print the app's version and exit
 
 )";
 }
