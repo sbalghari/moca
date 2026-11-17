@@ -68,24 +68,66 @@ Usage:
   moca [OPTIONS]
 
 Options:
-  -p, --prompt <TEXT>    Prompt for the agent to start a session with
-  -m, --model <MODEL>    Select a model for the session, NotImplemented!
-  -L, --list-models      List available models from OpenRouter
-  -h, --help             Print this help message and exit
-  -v, --version          Print the app's version and exit
+  -p, --prompt <TEXT>     Prompt for the agent to start a session with
+  -m, --model <MODEL>     Select a model for the session
+  -k, --api-key <KEY>     Pass an API key explicitly for this session
+  -L, --list-models       List available models
+      --init              Create the default config file and exit
+  -h, --help              Print this help message and exit
+  -v, --version           Print the app's version and exit
+
+The API key is read from MOCA_API_KEY or from the config file. Run
+`moca --init` to create the config file.
 ```
 
 Common invocations:
 
 ```bash
+# Create the config file (only needed once)
+./build/debug/moca --init
+
 # Ask the agent something
 ./build/debug/moca -p 'your prompt here...'
+
+# Override the model and API key for a single run
+./build/debug/moca -p 'your prompt here...' -m openrouter/free -k sk-or-...
 
 # Discover the model ids accepted by -m/--model
 ./build/debug/moca --list-models
 ```
 
-The agent reads its API key from the `MOCA_API_KEY` environment variable.
+## Configuration
+
+Moca stores its settings in a JSON file:
+
+- Linux/macOS: `$XDG_CONFIG_HOME/moca/config.json` (usually `~/.config/moca/config.json`)
+- Windows: `%APPDATA%\Moca\config.json`
+
+Run `moca --init` to create it. The file is created automatically on first run
+as well. A default file looks like this:
+
+```json
+{
+  "version": 1,
+  "provider": "openrouter",
+  "model": "openrouter/free",
+  "api_key": ""
+}
+```
+
+A value can come from several places. When more than one defines a setting, the
+highest one in this list wins:
+
+| Setting | Order |
+| --- | --- |
+| API key | `-k` flag, then `MOCA_API_KEY`, then `api_key` in the config file |
+| Model | `-m` flag, then `model` in the config file, then the provider default |
+| Provider | `provider` in the config file, then `openrouter` |
+| Base URL | `base_url` in the config file, then the provider default |
+
+Values passed with `-k` or `MOCA_API_KEY` are never written back to the config
+file. On Linux/macOS the file is stored with `0600` permissions because it may
+contain an API key.
 
 The project uses:
 

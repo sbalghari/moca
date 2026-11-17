@@ -7,10 +7,13 @@
 
 #include <string>
 
+// HTTP requests
+
 cpr::Response post_chat_completion(const std::string &base_url,
                                    const std::string &api_key,
                                    const nlohmann::json &request_body);
 
-cpr::Response get_models(const std::string &api_key);
+cpr::Response get_models(const std::string &base_url,
+                         const std::string &api_key);
 
 #endif // MOCA_CORE_HTTP_HPP

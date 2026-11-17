@@ -6,10 +6,12 @@
 struct CLIOptions {
     std::string prompt;
     std::string model;
+    std::string api_key;
 
     bool help = false;
     bool version = false;
     bool list_models = false;
+    bool init = false;
 };
 
 class CLI {

@@ -18,7 +18,7 @@ add_executable(moca
     src/core/config.cpp
     src/core/http.cpp
     src/core/tools.cpp
-    src/cli/cli.cpp
+    src/cli.cpp
 )
 
 target_include_directories(moca
