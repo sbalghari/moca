@@ -15,6 +15,8 @@ CLIOptions CLI::parse_arguments(int argc, char *argv[]) {
             options.version = true;
         } else if (arg == "-L" || arg == "--list-models") {
             options.list_models = true;
+        } else if (arg == "--init") {
+            options.init = true;
         } else if (arg == "-p" || arg == "--prompt") {
             if (i + 1 >= argc) {
                 throw CLIException("Missing value for " + arg);
@@ -52,7 +54,7 @@ CLIOptions CLI::parse_arguments(int argc, char *argv[]) {
 
     // Require a prompt unless executing a standalone command.
     if (!options.help && !options.version && !options.list_models &&
-        options.prompt.empty()) {
+        !options.init && options.prompt.empty()) {
         throw CLIException("A prompt is required. Use -h for help.");
     }
 
@@ -72,8 +74,12 @@ Options:
   -m, --model <MODEL>     Select a model for the session
   -k, --api-key <KEY>     Pass an API key explicitly for this session
   -L, --list-models       List available models
+      --init              Create the default config file and exit
   -h, --help              Print this help message and exit
   -v, --version           Print the app's version and exit
+
+The API key is read from MOCA_API_KEY or from the config file. Run
+`moca --init` to create the config file.
 
 )";
 }
