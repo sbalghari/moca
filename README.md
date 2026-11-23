@@ -96,6 +96,29 @@ Common invocations:
 ./build/debug/moca --list-models
 ```
 
+## Tools
+
+The agent can call three tools:
+
+- **Read** — return the contents of a file.
+- **Write** — create or overwrite a file. Missing parent directories are
+  created automatically.
+- **Bash** — run a shell command and return its combined output (stdout and
+  stderr), truncated to 8000 characters.
+
+The model decides when to use a tool. The agent loop sends the conversation
+back to the model after each tool result, so the model can chain several calls
+(for example: write a file, read it back, then run a command on it). The loop
+stops when the model answers without requesting a tool, or after 20 steps.
+
+Tool calling depends on the model. If the model ignores the tools or returns an
+error, try another one from `moca --list-models` (for example
+`dots-studio/dots-3-note-preview:free`).
+
+> **Warning:** the Bash tool is **not sandboxed**. It runs commands with your
+> user permissions in the current directory, so only use it with prompts you
+> trust.
+
 ## Configuration
 
 Moca stores its settings in a JSON file:
