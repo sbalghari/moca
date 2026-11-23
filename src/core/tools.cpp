@@ -19,7 +19,7 @@
 
 namespace {
 
-// Max tool output size, limited becase it is sent back to the model, 
+// Max tool output size, limited becase it is sent back to the model,
 // so a huge output may eat tokens
 constexpr std::size_t kMaxOutputChars = 8000;
 
